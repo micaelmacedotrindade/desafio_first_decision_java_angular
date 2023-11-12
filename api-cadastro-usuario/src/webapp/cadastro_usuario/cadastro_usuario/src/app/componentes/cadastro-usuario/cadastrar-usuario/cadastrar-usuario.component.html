@@ -1,0 +1,46 @@
+<section class="container">
+  <div class="registration-container">
+    <form (ngSubmit)="submitForm()" #registrationForm="">
+      <div class="form-group">
+        <label for="nome">Nome:</label>
+        <input type="text" id="nome" name="nome" minlength="3" maxlength="50" placeholder="Digite o nome..." [(ngModel)]="usuario.nome">
+        <div *ngIf="">
+          <div *ngIf="">Nome é obrigatório.</div>
+          <div *ngIf="">Nome deve ter no mínimo 3 caracteres.</div>
+          <div *ngIf="">Nome deve ter no máximo 50 caracteres.</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="email">E-mail:</label>
+        <input type="email" id="email" name="email" placeholder="Digite o e-mail..." [(ngModel)]="usuario.email">
+        <div *ngIf="">
+          <div *ngIf="">E-mail é obrigatório.</div>
+          <div *ngIf="">E-mail inválido.</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Senha:</label>
+        <input type="password" id="password" name="password"  required minlength="6" maxlength="20" placeholder="Digite uma senha... " [(ngModel)]="usuario.senha">
+        <div *ngIf="">
+          <div *ngIf="">Senha é obrigatória.</div>
+          <div *ngIf="">Senha deve ter no mínimo 6 caracteres.</div>
+          <div *ngIf="">Senha deve ter no máximo 20 caracteres.</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="confirmPassword">Confirmação de Senha:</label>
+        <input type="password" id="confirmPassword" name="confirmPassword"  required minlength="6" maxlength="20" placeholder="Redigite a senha... " [(ngModel)]="usuario.confirmacaoDeSenha">
+        <div *ngIf="">
+          <div *ngIf="">Confirmação de Senha é obrigatória.</div>
+          <div *ngIf="">Senhas não conferem!</div>
+        </div>
+      </div>
+
+      <button (click)="cadastrarUsuario()" type="submit" [disabled]="" class="botao-salvar">Salvar</button>
+      <button (click)="cancelarCadastro()" type="button" class="botao-cancelar">Cancelar</button>
+    </form>
+  </div>
+
+</section>
