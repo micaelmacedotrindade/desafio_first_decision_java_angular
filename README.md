@@ -2,7 +2,7 @@
 Desafio: Desenvolvedor Java + Angular
 
 ## Estrutura do projeto
-  O projeto possui backend e frontend nesse mesmo repositório. A API do frontend está na pasta 'front-api-usuario'.
+  O projeto possui backend e frontend nesse mesmo repositório. A API do frontend está na pasta '**/desafio_first/desafio_first_decision_java_angular/api-cadastro-usuario/src/webapp/front-api-usuario'.
 A API Java está no diretório raiz com toda estrutura padrão de projeto Maven.
 
 ## Configurações para subir o projeto
