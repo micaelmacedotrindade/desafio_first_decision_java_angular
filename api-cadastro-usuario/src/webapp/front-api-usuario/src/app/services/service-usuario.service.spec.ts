@@ -21,12 +21,6 @@ const usuarioRequest = {
   confirmacaoDeSenha: '123456',
 };
 
-class UsuarioServiceMock extends UsuarioService {
-  override cadastrar(usuario: Usuario): Observable<UsuarioResponse> {
-    return of(usuarioResponse);
-  }
-}
-
 describe('UsuarioService', () => {
   let service: UsuarioService;
   let httpMock: HttpTestingController;
@@ -49,13 +43,9 @@ describe('UsuarioService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should send a POST request to create a user', fakeAsync(() => {
+  it('Deve enviar um post para criar usuario e receber um DTO de UsuarioResponse', fakeAsync(() => {
 
-    const mockResponse: UsuarioResponse = {
-      id: 1,
-      nome: 'John Doe',
-      email: 'john@example.com'
-    };
+    const mockResponse = usuarioResponse;
 
     service.cadastrar(usuarioRequest).subscribe((response) => {
       expect(response).toEqual(mockResponse);

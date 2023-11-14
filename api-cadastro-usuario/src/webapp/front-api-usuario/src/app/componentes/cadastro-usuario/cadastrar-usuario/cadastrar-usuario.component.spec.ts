@@ -8,25 +8,10 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { CadastrarUsuarioComponent } from './cadastrar-usuario.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { of, Observable } from 'rxjs';
 import { UsuarioService } from 'src/app/services/service-usuario.service';
-import { UsuarioResponse } from 'src/app/entidades/usuarioResponse';
 import { Router } from '@angular/router';
-import { Usuario } from 'src/app/entidades/usuario';
 
 const usuarioServiceMock = jasmine.createSpyObj('UsuarioService', ['cadastrar']);
-const response = {
-  id: 1,
-  nome: 'teste',
-  email: 'teste@teste',
-};
-
-class UsuarioServiceMock extends UsuarioService {
-  override cadastrar(usuario: Usuario): Observable<UsuarioResponse> {
-    // Mock uma resposta bem-sucedida aqui
-    return of(response);
-  }
-}
 
 describe('CadastrarUsuarioComponent', () => {
   let component: CadastrarUsuarioComponent;
@@ -39,7 +24,6 @@ describe('CadastrarUsuarioComponent', () => {
       declarations: [CadastrarUsuarioComponent],
       imports: [ReactiveFormsModule, HttpClientTestingModule],
       providers: [
-        // Substitua o serviço real pelo mock
         {
           provide: UsuarioService,
           useValue: usuarioServiceMock
@@ -51,7 +35,6 @@ describe('CadastrarUsuarioComponent', () => {
     component = fixture.componentInstance;
     router = TestBed.inject(Router);
     usuarioService = TestBed.inject(UsuarioService);
-    // Obtenha uma instância do serviço mock
     fixture.detectChanges();
   });
 
@@ -78,45 +61,42 @@ describe('CadastrarUsuarioComponent', () => {
     );
   }));
 
-  it('should disable submit button when form is invalid', fakeAsync(() => {
-    // Simulate entering valid data in the form
+  it('Deve apresentar mensagem de erro ao submeter um formulario inválido', fakeAsync(() => {
+    // Simulando um formulario válido
     component.formulario.patchValue({
-      nome: 'John Doe',
-      email: 'john@example.com',
-      senha: 'password',
-      confirmacaoDeSenha: 'password',
+      nome: 'Teste',
+      email: 'teste@teste',
+      senha: '123456',
+      confirmacaoDeSenha: '123456',
     });
 
-    // Trigger change detection
     fixture.detectChanges();
     tick();
 
-    // Verify that the submit button is enabled when the form is valid
+    // Verificando se o botão salvar está ativo
     const submitButton = fixture.debugElement.query(
       By.css('button[type="submit"]')
     ).nativeElement;
     expect(submitButton.disabled).toBeFalsy();
 
-    // Simulate entering invalid data in the form
-    component.formulario.get('senha')?.setValue('pass'); // Assuming minimum length for senha is 6
+    // Simulando inserir um dado inválido no formulario
+    component.formulario.get('senha')?.setValue('pass'); // senha com menos de 6 caracteres
 
-    // Trigger change detection
     fixture.detectChanges();
     tick();
 
-    // Verify that the submit button is disabled when the form is invalid
+    // Verificando se o botão salvar foi desabilitado
     expect(submitButton.disabled).toBeTruthy();
   }));
 
-  it('should show error messages for blank fields', fakeAsync(() => {
-    // Simulate form submission with blank fields
+  it('Deve apresentar mensagem de erro quando o campo estiver em branco', fakeAsync(() => {
+    // Simulando formulário em branco
     component.cadastrarUsuario();
 
-    // Trigger change detection
     fixture.detectChanges();
     tick();
 
-    // Verify error messages for blank fields
+    // Verificando erro de obrigatoriedade de preenchimento dos campos
     expect(component.formulario.get('nome')?.hasError('required')).toBeTruthy();
     expect(
       component.formulario.get('email')?.hasError('required')
@@ -129,84 +109,83 @@ describe('CadastrarUsuarioComponent', () => {
     ).toBeTruthy();
   }));
 
-  it('should show error message for minimum password length', fakeAsync(() => {
-    // Simulate entering a password with less than 6 characters
+  it('Deve apresentar mensagem de ero quando o campo senha estiver com menos de 6 caracteres', fakeAsync(() => {
+    // Simulando inserir senha com menos de 6 caracteres
     component.formulario.get('senha')?.setValue('pass');
 
-    // Trigger change detection
     fixture.detectChanges();
     tick();
 
-    // Verify error message for minimum password length
+    // Verificando erro de senha inválida
     expect(component.formulario.get('senha')?.hasError('minlength')).toBeTruthy();
   }));
 
-  it('should show error message for maximum password length', fakeAsync(() => {
-    // Simulate entering a password with more than 20 characters
+  it('Deve apresentar mensagem de ero quando o campo senha estiver com mais de 20 caracteresh', fakeAsync(() => {
+    // Simulando inserir senha com mais de 20 caracteres
     component.formulario.get('senha')?.setValue('a'.repeat(21));
 
-    // Trigger change detection
     fixture.detectChanges();
     tick();
 
-    // Verify error message for maximum password length
+    // Verificando erro de senha inválida
     expect(component.formulario.get('senha')?.hasError('maxlength')).toBeTruthy();
   }));
 
-  it('should show error message for password containing spaces', fakeAsync(() => {
-    // Simulate entering a password with spaces
+  it('Deve apresentar erro ao inserir senha apenas com espaços em branco', fakeAsync(() => {
+    // Inserindo senha apenas com espaços em branco
     component.formulario.get('senha')?.setValue('          ');
 
-    // Trigger change detection
     fixture.detectChanges();
     tick();
 
-    // Verify error message for password containing spaces
+    // Verificando erro de senha inválida
     expect(component.formulario.get('senha')?.hasError('pattern')).toBeTruthy();
   }));
 
-  it('should clear form fields when "Limpar" button is clicked', fakeAsync(() => {
+  it('Deve limpar todos os campos quando o botão Limpar for clicado', fakeAsync(() => {
     // Simulate entering data in the form
     component.formulario.patchValue({
-      nome: 'John Doe',
-      email: 'john@example.com',
-      senha: 'password',
-      confirmacaoDeSenha: 'password',
+      nome: 'teste',
+      email: 'teste@teste',
+      senha: '123456',
+      confirmacaoDeSenha: '123456',
     });
 
-    // Trigger change detection
     fixture.detectChanges();
     tick();
 
-    // Verify that the form fields are filled
-    expect(component.formulario.get('nome')?.value).toBe('John Doe');
-    expect(component.formulario.get('email')?.value).toBe('john@example.com');
-    expect(component.formulario.get('senha')?.value).toBe('password');
-    expect(component.formulario.get('confirmacaoDeSenha')?.value).toBe('password');
+    // Verificando se os campos foram preenchidos
+    expect(component.formulario.get('nome')?.value).toBe('teste');
+    expect(component.formulario.get('email')?.value).toBe('teste@teste');
+    expect(component.formulario.get('senha')?.value).toBe('123456');
+    expect(component.formulario.get('confirmacaoDeSenha')?.value).toBe('123456');
 
-    // Simulate clicking the "Limpar" button
+    // Clicando no botão Limpar
     const limparButton = fixture.debugElement.query(By.css('.botao-cancelar')).nativeElement;
     limparButton.click();
 
-    // Trigger change detection
     fixture.detectChanges();
     tick();
 
-    // Verify that the form fields are cleared
+    // Verificando se os campos foram limpados
     expect(component.formulario.get('nome')?.value).toBe('');
     expect(component.formulario.get('email')?.value).toBe('');
     expect(component.formulario.get('senha')?.value).toBe('');
     expect(component.formulario.get('confirmacaoDeSenha')?.value).toBe('');
   }));
 
-  it('should call cadastrarUsuario() when "Salvar" button is clicked and form is valid', () => {
-    spyOn(component, 'cadastrarUsuario'); // Certifique-se de usar spyOn diretamente no componente
+  it('Deve chamar cadastrarUsuario() quando o botão salvar for acionado com o formulário válido', () => {
+    //Criando spy
+    spyOn(component, 'cadastrarUsuario');
 
+    //Simulando botão salvar
     const salvarButton = fixture.debugElement.query(By.css('#botao-salvar'));
     expect(salvarButton).toBeTruthy();
 
+    //simulando clique em salvar, considerando que o formulario está válido
     salvarButton.triggerEventHandler('click', null);
 
+    //Verificando se a função salvar foi chamada
     expect(component.cadastrarUsuario).toHaveBeenCalled();
   });
 
