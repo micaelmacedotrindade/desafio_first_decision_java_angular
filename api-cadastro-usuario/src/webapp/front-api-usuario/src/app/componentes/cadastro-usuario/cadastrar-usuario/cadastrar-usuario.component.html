@@ -1,0 +1,71 @@
+<section class="container">
+  <div class="registration-container">
+    <form [formGroup]="formulario">
+      <div class="form-group">
+        <label for="nome">Nome:</label>
+        <input type="text" id="nome" formControlName="nome" placeholder="Digite o nome...">
+        <div class="mensagem__erro" *ngIf="formulario.get('nome')?.errors?.['required'] && formulario.get('nome')?.touched" >
+          Nome é obrigatório.
+        </div>
+        <div class="mensagem__erro" *ngIf="formulario.get('nome')?.errors?.['minlength'] && (formulario.get('nome')?.touched || formulario.get('nome')?.dirty)">
+          Nome deve ter no mínimo 3 caracteres.
+        </div>
+        <div class="mensagem__erro" *ngIf="formulario.get('nome')?.errors?.['maxlength'] && (formulario.get('nome')?.touched || formulario.get('nome')?.dirty)">
+          Nome deve ter no máximo 50 caracteres.
+        </div>
+        <div class="mensagem__erro" *ngIf="formulario.get('nome')?.errors?.['pattern'] && (formulario.get('nome')?.touched || formulario.get('nome')?.dirty)">
+        Nome não pode ser composto por espaços em branco.
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="email">E-mail:</label>
+        <input type="email" id="email" formControlName="email" placeholder="Digite o e-mail..." >
+        <div class="mensagem__erro" *ngIf="formulario.get('email')?.errors?.['required'] && formulario.get('email')?.touched" >
+          E-mail é obrigatório.
+        </div>
+        <div class="mensagem__erro" *ngIf="formulario.get('email')?.errors?.['email'] && (formulario.get('email')?.touched || formulario.get('email')?.dirty)">
+          Informe um e-mail válido.
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="senha">Senha:</label>
+        <input type="password" id="senha" formControlName="senha"  placeholder="Digite uma senha... ">
+        <div class="mensagem__erro" *ngIf="formulario.get('senha')?.errors?.['required'] && formulario.get('senha')?.touched" >
+          Senha é obrigatória.
+        </div>
+        <div class="mensagem__erro" *ngIf="formulario.get('senha')?.errors?.['minlength'] && (formulario.get('senha')?.touched || formulario.get('senha')?.dirty)">
+          Senha deve ter no mínimo 6 caracteres.
+        </div>
+        <div class="mensagem__erro" *ngIf="formulario.get('senha')?.errors?.['maxlength'] && (formulario.get('senha')?.touched || formulario.get('senha')?.dirty)">
+          Senha deve ter no máximo 20 caracteres.
+        </div>
+        <div class="mensagem__erro" *ngIf="formulario.get('senha')?.errors?.['pattern'] && (formulario.get('senha')?.touched || formulario.get('senha')?.dirty)">
+          Senha não pode ser composta por espaços em branco.
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="confirmacaoDeSenha">Confirmação de Senha:</label>
+        <input type="password" id="confirmacaoDeSenha" formControlName="confirmacaoDeSenha"  required placeholder="Redigite a senha... " >
+        <div class="mensagem__erro" *ngIf="formulario.get('confirmacaoDeSenha')?.errors?.['required'] && formulario.get('confirmacaoDeSenha')?.touched" >
+          Confirmação de senha é obrigatória.
+        </div>
+        <div class="mensagem__erro" *ngIf="formulario.get('confirmacaoDeSenha')?.errors?.['senhasCoincidem'] && (formulario.get('confirmacaoDeSenha')?.touched || formulario.get('confirmacaoDeSenha')?.dirty)" >
+          Senhas não conferem.
+        </div>
+      </div>
+
+      <button
+        id = "botao-salvar"
+        (click)="cadastrarUsuario()"
+        [disabled]="!formulario.valid"
+        type="submit"
+        [ngClass]="habilitarBotao()">
+          Salvar
+      </button>
+      <button (click)="cancelarCadastro()" type="button" class="botao-cancelar">Limpar</button>
+    </form>
+  </div>
+
+</section>
