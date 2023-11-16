@@ -5,4 +5,5 @@ CREATE TABLE IF NOT EXISTS usuario(
     email VARCHAR(100) NOT NULL,
     senha VARCHAR(20) NOT NULL,
     primary key ("id")
-);
+); 
+
